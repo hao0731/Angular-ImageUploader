@@ -1,21 +1,51 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="text-center">Image Uploader</h1>
+    <p class="lead">請選擇上傳之圖片：</p>
+    <div class="custom-file mb-3">
+      <input type="file" class="custom-file-input" id="customFile" (change)="fileChangeEvent($event)" />
+      <label class="custom-file-label" for="customFile">選擇檔案</label>
+    </div>
+    <p class="text-center">或</p>
+    <form [formGroup]="imageURLForm" (ngSubmit)="fileGetEvent(imageURLForm.value.url)" #urlForm="ngForm">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="輸入圖片網址" aria-label="圖片網址" aria-describedby="basic-addon2" [formControl]="imageURLForm.controls.url" />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="submit" [disabled]="urlForm.form.invalid">Load</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
-<router-outlet></router-outlet>
+<div *ngIf="isLoad" class="container-fluid">
+  <h2 class="text-center">圖片編輯區</h2>
+  <div class="my-4">
+    <ul>
+      <li>根據下方的裁剪框裁剪圖片</li>
+      <li>使用游標在預覽區中選定好位置，按著滑鼠開始將要打馬賽克的區域進行打碼</li>
+    </ul>
+  </div>
+  <div class="row text-center">
+    <div class="col-md-6">
+      <h4>裁剪區</h4>
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [imageFileChanged]="imageFileChanged"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="4 / 3"
+        [resizeToWidth]="500"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        (imageLoaded)="imageLoaded()"
+        (cropperReady)="cropperReady()"
+        (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+      <img #hidingImage [src]="croppedImage" style="display: none;">
+    </div>
+    <div class="col-md-6">
+      <h4>預覽區</h4>
+      <app-edit-image [hidingImageWidth]="hidingImageWidth" [hidingImageHeight]="hidingImageHeight" [croppedImageData]="croppedImage"></app-edit-image>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>
