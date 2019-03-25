@@ -26,7 +26,7 @@ export class AppComponent {
 
   constructor(private fb: FormBuilder, private ImageURLWorker: ImagesService) {
     this.imageURLForm = fb.group({
-      url: ['', [Validators.required]]
+      'url': ['', [Validators.required]]
     })
   }
 

@@ -1,5 +1,8 @@
-import { Component, Input, ElementRef, ViewChild, OnInit, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, Input, ElementRef, ViewChild, OnInit, OnChanges } from '@angular/core'
+import { FormGroup, FormBuilder,  Validators } from '@angular/forms'
+import { ImageInfo } from './../../interfaces/structures/image-info'
 import { MosaicService } from './../../services/canvas/mosaic.service'
+import { ApiService } from './../../services/http/api.service'
 
 @Component({
   selector: 'app-edit-image',
@@ -14,7 +17,12 @@ export class EditImageComponent implements OnChanges, OnInit {
 
   private image = new Image()
 
-  constructor(private mosaic: MosaicService) { 
+  private uploadImageForm: FormGroup
+
+  constructor(private fb: FormBuilder, private mosaic: MosaicService, private api: ApiService) {
+    this.uploadImageForm = fb.group({
+      'file': [null, [Validators.required]]
+    })
   }
 
   private mouseDown(e: any) {
@@ -91,7 +99,32 @@ export class EditImageComponent implements OnChanges, OnInit {
     e.preventDefault()
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  private saveImage(e: any) {
+    e.target.href = this.drawImage.nativeElement.toDataURL()
+  }
+
+  private uploadImage() {
+    const bin = atob(this.drawImage.nativeElement.toDataURL().split(',')[1])
+    const binLength = bin.length
+    const buffer = []
+    for(let i = 0; i < binLength;i++) {
+      buffer.push(bin.charCodeAt(i))
+    }
+    let file = new Blob([new Uint8Array(buffer)], {type: 'image/png'})
+    file = new File([file], 'Image.png')
+    const info: ImageInfo = { image: file }
+    this.api.uploadImage(info)
+
+  }
+
+  private blobToFile(blob: Blob): File {
+    let file: any = blob
+    file.name = 'Image'
+    file.lastModifiedDate = new Date()
+    return <File>file
+  }
+
+  ngOnChanges() {
     this.drawImage.nativeElement.width = this.hidingImageWidth
     this.drawImage.nativeElement.height = this.hidingImageHeight
     this.image.src = this.croppedImageData
