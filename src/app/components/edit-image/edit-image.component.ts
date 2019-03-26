@@ -18,6 +18,7 @@ export class EditImageComponent implements OnChanges, OnInit {
   private image = new Image()
 
   private uploadImageForm: FormGroup
+  private message: string = ''
 
   constructor(private fb: FormBuilder, private mosaic: MosaicService, private api: ApiService) {
     this.uploadImageForm = fb.group({
@@ -103,7 +104,8 @@ export class EditImageComponent implements OnChanges, OnInit {
     e.target.href = this.drawImage.nativeElement.toDataURL()
   }
 
-  private uploadImage() {
+  private async uploadImage() {
+    this.message = ''
     const bin = atob(this.drawImage.nativeElement.toDataURL().split(',')[1])
     const binLength = bin.length
     const buffer = []
@@ -111,20 +113,19 @@ export class EditImageComponent implements OnChanges, OnInit {
       buffer.push(bin.charCodeAt(i))
     }
     let file = new Blob([new Uint8Array(buffer)], {type: 'image/png'})
-    file = new File([file], 'Image.png')
+    file = new File([file], 'Image.png', {type: 'image/png'})
     const info: ImageInfo = { image: file }
-    this.api.uploadImage(info)
-
-  }
-
-  private blobToFile(blob: Blob): File {
-    let file: any = blob
-    file.name = 'Image'
-    file.lastModifiedDate = new Date()
-    return <File>file
+    try {
+      const isUpload = await this.api.uploadImage(info)
+      this.message = '上傳完成'
+    }
+    catch(e) {
+      this.message = e
+    }
   }
 
   ngOnChanges() {
+    this.message = ''
     this.drawImage.nativeElement.width = this.hidingImageWidth
     this.drawImage.nativeElement.height = this.hidingImageHeight
     this.image.src = this.croppedImageData

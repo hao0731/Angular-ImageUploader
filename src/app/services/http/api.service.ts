@@ -15,9 +15,9 @@ export class ApiService {
     return await new Promise((resolve, reject) => {
       this.http.post('/api/images', formData, { observe: 'response', headers: httpHeader })
       .subscribe(res => {
-        resolve(res)
+        resolve(true)
       }, err => {
-        reject(err)
+        reject(`上傳時發生錯誤`)
       })
     })
     
