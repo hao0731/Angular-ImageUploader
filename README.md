@@ -1,27 +1,14 @@
-# Cropper
+# Angular-ImageUploader
+本專案主要功能如下所示：
+1.  可以從本地端或是輸入URL來進行圖片編輯
+2.  可以針對輸入之圖片進行裁剪
+3.  將要裁剪的範圍選定後，可以使用滑鼠在預覽區中針對圖片欲打碼之區域進行馬賽克編輯
+4.  提供圖片下載以及PNG、JPG格式上傳至伺服器
+5.  可以透過縮圖製作功能針對已上傳之圖片進行縮圖之動作，僅需要輸入該圖片之檔名以及縮圖之寬度
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.2.
+## Tools
+使用Node.js + Express製作後端，前端則使用Angular做為框架，為了快速建構網站基本UI，故採用BootStrap進行基本UI設計
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Start
+將專案clone下來之後執行`npm install`
+由於已經設定好proxy功能，故僅需要輸入`npm start`即可完整啟動應用
