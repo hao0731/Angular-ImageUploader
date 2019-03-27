@@ -20,7 +20,6 @@ export class ApiService {
         reject(`上傳時發生錯誤`)
       })
     })
-    
   }
 
   private createFormData(info: ImageInfo):FormData {

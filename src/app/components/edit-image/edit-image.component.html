@@ -11,5 +11,6 @@
 <div class="text-center my-3">
   <p>{{ message }}</p>
   <a href="javascript: void(0)" download="Image.png" class="btn btn-success" role="button" aria-pressed="true" (click)="saveImage($event)">下載</a>
-  <button class="btn btn-primary" type="button" (click)="uploadImage()">上傳</button>
+  <button class="btn btn-primary" type="button" (click)="uploadImage('png')">PNG上傳</button>
+  <button class="btn btn-primary" type="button" (click)="uploadImage('jpeg')">JPG上傳</button>
 </div>

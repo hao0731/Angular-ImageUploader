@@ -1,5 +1,4 @@
 import { Component, Input, ElementRef, ViewChild, OnInit, OnChanges } from '@angular/core'
-import { FormGroup, FormBuilder,  Validators } from '@angular/forms'
 import { ImageInfo } from './../../interfaces/structures/image-info'
 import { MosaicService } from './../../services/canvas/mosaic.service'
 import { ApiService } from './../../services/http/api.service'
@@ -17,13 +16,9 @@ export class EditImageComponent implements OnChanges, OnInit {
 
   private image = new Image()
 
-  private uploadImageForm: FormGroup
   private message: string = ''
 
-  constructor(private fb: FormBuilder, private mosaic: MosaicService, private api: ApiService) {
-    this.uploadImageForm = fb.group({
-      'file': [null, [Validators.required]]
-    })
+  constructor(private mosaic: MosaicService, private api: ApiService) {
   }
 
   private mouseDown(e: any) {
@@ -104,7 +99,7 @@ export class EditImageComponent implements OnChanges, OnInit {
     e.target.href = this.drawImage.nativeElement.toDataURL()
   }
 
-  private async uploadImage() {
+  private async uploadImage(type: string) {
     this.message = ''
     const bin = atob(this.drawImage.nativeElement.toDataURL().split(',')[1])
     const binLength = bin.length
@@ -112,8 +107,8 @@ export class EditImageComponent implements OnChanges, OnInit {
     for(let i = 0; i < binLength;i++) {
       buffer.push(bin.charCodeAt(i))
     }
-    let file = new Blob([new Uint8Array(buffer)], {type: 'image/png'})
-    file = new File([file], 'Image.png', {type: 'image/png'})
+    let file = new Blob([new Uint8Array(buffer)], {type: `image/${ type }`})
+    file = new File([file], `Image.${ type }`, {type: `image/${ type }`})
     const info: ImageInfo = { image: file }
     try {
       const isUpload = await this.api.uploadImage(info)
