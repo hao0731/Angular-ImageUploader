@@ -111,8 +111,8 @@ export class EditImageComponent implements OnChanges, OnInit {
     file = new File([file], `Image.${ type }`, {type: `image/${ type }`})
     const info: ImageInfo = { image: file }
     try {
-      const isUpload = await this.api.uploadImage(info)
-      this.message = '上傳完成'
+      const uploadMessage = await this.api.uploadImage(info)
+      this.message = uploadMessage
     }
     catch(e) {
       this.message = e

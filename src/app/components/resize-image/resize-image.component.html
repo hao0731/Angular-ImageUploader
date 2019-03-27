@@ -1,0 +1,21 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="text-center">縮圖製作</h1>
+    <form [formGroup]="resizeImageForm" (ngSubmit)="resizeImage(resizeImageForm.value)" #resizeForm="ngForm">
+      <p class="lead">請輸入已上傳之圖片檔名：</p>
+      <input type="text" class="form-control" placeholder="輸入檔名..." [formControl]="resizeImageForm.controls['filename']">
+      <p class="lead mt-3">請輸入縮圖寬度(px)：</p>
+      <input type="text" class="form-control" placeholder="100~2000"  [formControl]="resizeImageForm.controls['width']">
+      <div class="text-right my-3">
+        <button type="submit" class="btn btn-primary" [disabled]="resizeForm.form.invalid">製作</button>
+      </div>
+    </form>
+    <div class="text-center my-4">
+      <div *ngIf="imageURL !== '' && imageURL !== '縮圖時發生錯誤'">
+        <h3>縮圖結果</h3>
+        <img class="img-fluid" [src]="imageURL">
+      </div>
+      <div *ngIf="imageURL === '縮圖時發生錯誤'" class="alert alert-danger">縮圖時發生錯誤</div>
+    </div>
+  </div>
+</div>
